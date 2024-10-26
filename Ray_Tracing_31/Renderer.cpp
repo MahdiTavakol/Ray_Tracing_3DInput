@@ -64,6 +64,9 @@ void renderer::setup()
 	case CORNELL_SMOKE:
 		setup_cornell_smoke();
 		break;
+	case OBJ_MODEL:
+		setup_3d_obj();
+		break;
 	}
 
 	para->setup(cam, world);
@@ -285,4 +288,12 @@ void renderer::setup_cornell_smoke()
 	world->add(make_shared<constant_medium>(box1, 0.01, color(0, 0, 0)));
 	world->add(make_shared<constant_medium>(box2, 0.01, color(1, 1, 1)));;
 
+}
+
+
+void renderer::setup_3d_obj()
+{
+	std::string obj_file_name("Toyota_Sequoia_2023_2015_obj.obj");
+	shared_ptr<obj_model_reader> model_reader = make_shared<obj_model_reader>(obj_file_name, world);
+	model_reader->reader();
 }

@@ -25,6 +25,7 @@ struct face_indx
 class obj_model_reader {
 public:
 	obj_model_reader(std::string _obj_file_name, hittable_list* _world);
+	void reader();
 
 private:
 	hittable_list* world;

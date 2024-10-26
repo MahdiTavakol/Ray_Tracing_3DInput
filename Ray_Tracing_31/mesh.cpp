@@ -4,8 +4,13 @@ mesh::mesh(const std::vector<point3>& _vs, const std::vector<point3>& _vts,
 	const std::vector<point3>& _vns, shared_ptr<material> _mat)
 	: vs(_vs), vts(_vts), vns(_vns), mat(_mat), num_edges(_vs.size())
 {
-	auto n1 = cross(vs[1]-vs[0], vs[2]-vs[0]);
-	auto n2 = cross(vs[1]-vs[3], vs[2]-vs[3]);
+	initialize();
+}
+
+void mesh::initialize()
+{
+	auto n1 = cross(vs[1] - vs[0], vs[2] - vs[0]);
+	auto n2 = cross(vs[1] - vs[3], vs[2] - vs[3]);
 	unit_n1 = unit_vector(n1);
 	unit_n2 = unit_vector(n2);
 	Q1 = vs[0];

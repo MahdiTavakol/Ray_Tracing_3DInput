@@ -26,6 +26,48 @@ public:
 	}
 };
 
+
+class general : public material
+{
+public:
+	general(const color& _albedo,  const double& _shininess, 
+		const double& _d, const double& _Tr, const color& _Tf, const color _Ks):
+		albedo(_albedo),  shininess(_shininess), d(_d), Tr(_Tr), Tf(_Tf), Ks(_Ks)
+	{}
+
+
+	bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const override
+	{
+		// Calculate the effective transparency based on d (dissolve) and Tr (transparency)
+		double effective_transparency = (1.0 - d) * Tr;
+
+		// Reflect the incoming ray based on the hit normal
+		vec3 reflected = reflect(r_in.direction(), rec.normal);
+
+		// Make reflection a bit fuzzier based on `fuzz` parameter
+		reflected += fuzz * random_unit_vector(); // Adjusted to fuzziness
+
+		// Control sharpness of reflection based on shininess (Ns)
+		reflected = reflected * (1.0 - shininess / 100.0) + rec.normal * (shininess / 100.0);
+
+		// Scatter the ray with the adjusted direction
+		scattered = ray(rec.p, reflected, r_in.time());
+
+		// Apply attenuation based on effective transparency
+		// You may choose to mix the albedo and some transparency effect
+		attenuation = albedo * (1.0 - effective_transparency) + Tf * effective_transparency;
+
+		return true;
+	}
+
+
+private:
+	color albedo;
+	double shininess;
+	double d, Tr;
+	color Ka, Ks, Tf;
+};
+
 class lambertian : public material
 {
 public:
@@ -35,6 +77,7 @@ public:
 
 	bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const override
 	{
+
 		auto scatter_direction = rec.normal + random_unit_vector();
 
 		if (scatter_direction.near_zero())

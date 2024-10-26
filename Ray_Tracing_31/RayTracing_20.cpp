@@ -26,8 +26,9 @@ int main(int argc, char** argv)
 	//mode = CORNELL_BOX;
 	//mode = TWO_BOXES;
 	//mode = TWO_BOXES_ROTATED;
-	mode = CORNELL_SMOKE;
-	
+	//mode = CORNELL_SMOKE;
+	mode = OBJ_MODEL;
+
 	//filename = "RT19.ppm";
 	//filename = "RT20.ppm";
 	//filename = "RT21.ppm";
@@ -38,7 +39,8 @@ int main(int argc, char** argv)
 	//filename = "RT26.ppm";
 	//filename = "RT27.ppm";
 	//filename = "RT28.ppm";
-	filename = "RT29.ppm";
+	//filename = "RT29.ppm";
+	filename = "RT30.ppm";
 
 	renderer* render = new renderer(argc, argv, mode, filename);
 

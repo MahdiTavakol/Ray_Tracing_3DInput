@@ -3,6 +3,7 @@
 
 #include "rtweekend.h"
 
+#include "obj_model_reader.h"
 #include "aabb.h"
 #include "bvh.h"
 #include "camera.h"
@@ -62,6 +63,7 @@ private:
 	void setup_boxes();
 	void setup_boxes_rotated();
 	void setup_cornell_smoke();
+	void setup_3d_obj();
 
 };
 
