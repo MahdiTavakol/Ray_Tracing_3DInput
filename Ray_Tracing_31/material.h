@@ -27,13 +27,12 @@ public:
 	}
 };
 
-
 class general : public material
 {
 public:
-	general(const color& _albedo,  const double& _shininess, 
-		const double& _d, const double& _Tr, const color& _Tf, const color _Ks):
-		albedo(_albedo),  shininess(_shininess), d(_d), Tr(_Tr), Tf(_Tf), Ks(_Ks)
+	general(const color& _albedo, const double& _shininess,
+		const double& _d, const double& _Tr, const color& _Tf, const color _Ks) :
+		albedo(_albedo), shininess(_shininess), d(_d), Tr(_Tr), Tf(_Tf), Ks(_Ks)
 	{}
 
 
@@ -46,7 +45,7 @@ public:
 		vec3 reflected = reflect(r_in.direction(), rec.normal);
 
 		// Make reflection a bit fuzzier based on `fuzz` parameter
-		reflected += fuzz * random_unit_vector(); // Adjusted to fuzziness
+		//reflected += fuzz * random_unit_vector(); // Adjusted to fuzziness
 
 		// Control sharpness of reflection based on shininess (Ns)
 		reflected = reflected * (1.0 - shininess / 100.0) + rec.normal * (shininess / 100.0);
@@ -69,6 +68,7 @@ private:
 	color Ka, Ks, Tf;
 };
 
+
 class lambertian : public material
 {
 public:
@@ -78,12 +78,11 @@ public:
 
 	bool scatter(const ray& r_in, const hit_record& rec, color& attenuation, ray& scattered) const override
 	{
-
 		auto scatter_direction = rec.normal + random_unit_vector();
 
 		if (scatter_direction.near_zero())
 			scatter_direction = rec.normal;
-		scattered = ray(rec.p, scatter_direction,r_in.time());
+		scattered = ray(rec.p, scatter_direction, r_in.time());
 		attenuation = tex->value(rec.u, rec.v, rec.p);
 		return true;
 	}
@@ -100,7 +99,7 @@ public:
 	{
 		vec3 reflected = reflect(r_in.direction(), rec.normal);
 		reflected = unit_vector(reflected) + fuzz * random_unit_vector();
-		scattered = ray(rec.p, reflected,r_in.time());
+		scattered = ray(rec.p, reflected, r_in.time());
 		attenuation = albedo;
 		return true;
 	}
@@ -126,12 +125,12 @@ public:
 		bool cannot_refract = ri * sin_theta > 1.0;
 		vec3 direction;
 
-		if (cannot_refract || reflectance(cos_theta,ri)> random_double())
+		if (cannot_refract || reflectance(cos_theta, ri) > random_double())
 			direction = reflect(unit_direction, rec.normal);
 		else
 			direction = refract(unit_direction, rec.normal, ri);
 
-		scattered = ray(rec.p, direction,r_in.time());
+		scattered = ray(rec.p, direction, r_in.time());
 		return true;
 	}
 
@@ -164,7 +163,7 @@ class isotropic : public material
 {
 public:
 	isotropic(const color& _albedo) : tex(make_shared<solid_color>(_albedo)) {}
-	isotropic(shared_ptr<texture> _tex): tex(_tex) {}
+	isotropic(shared_ptr<texture> _tex) : tex(_tex) {}
 
 	bool scatter(const ray& _r_in, const hit_record& _rec, color& _attenuation, ray& _scattered) const override
 	{
