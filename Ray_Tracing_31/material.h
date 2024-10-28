@@ -7,8 +7,9 @@
 #include "ray.h"
 #include "color.h"
 #include "texture.h"
+#include "hittable.h"
 
-class hit_record;
+//class hit_record;
 
 class material
 {

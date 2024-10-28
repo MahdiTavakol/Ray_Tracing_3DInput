@@ -83,7 +83,7 @@ inline vec3 unit_vector(const vec3& v) {
     return v / v.length();
 }
 
-inline static std::istream& operator>>(std::istream& cin, vec3& point)
+/*inline static std::istream& operator>>(std::istream& cin, vec3& point)
 {
     double x, y, z;
     if (cin >> x >> y >> z)
@@ -95,7 +95,7 @@ inline static std::istream& operator>>(std::istream& cin, vec3& point)
         cin.setstate(std::ios::failbit);
     }
     return cin;
-}
+}*/
 
 
 
