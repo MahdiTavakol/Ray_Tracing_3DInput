@@ -1,0 +1,11 @@
+The input: 
+C:\6-Courses\7-RayTracing\3DModels\RayTracing31\Ray_Tracing_31\x64\Debug\Ray_Tracing_31.exe 
+The parsed values: 
+C:\6-Courses\7-RayTracing\3DModels\RayTracing31\Ray_Tracing_31\x64\Debug\Ray_Tracing_31.exe
+image_width = 200
+samples_per_pixel = 600
+max_depth = 50
+vfov = 20
+aspect_ratio = 16/9
+fps = 60
+num_seconds = 10

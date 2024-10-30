@@ -293,7 +293,7 @@ void renderer::setup_cornell_smoke()
 
 void renderer::setup_3d_obj()
 {
-	std::string obj_file_name("Toyota_Sequoia_2023_2015_obj.obj");
+	std::string obj_file_name("Toyota_Sequoia_2023/Toyota_Sequoia_2023_2015_obj.obj");
 	shared_ptr<obj_model_reader> model_reader = make_shared<obj_model_reader>(obj_file_name, world);
 	model_reader->reader();
 }

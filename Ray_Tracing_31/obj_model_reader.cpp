@@ -17,8 +17,8 @@ void obj_model_reader::read_obj_file()
 	std::ifstream obj_file(obj_file_name);
 	std::stringstream iss;
 
-	int file_vs_num, file_vts_num, file_vns_num;
-	int file_polygon_num, file_triangle_num;
+	int file_vs_num = 0, file_vts_num = 0, file_vns_num = 0;
+	int file_polygon_num = 0, file_triangle_num = 0;
 
 	face_indx faces;
 	int num_edges = 0;
@@ -50,7 +50,7 @@ void obj_model_reader::read_obj_file()
 					if (dummy_str == "polygons")
 					{
 						file_polygon_num = dummy_int;
-						if (iss >> dummy_int >> dummy_str)
+						if (iss >> dummy_str >> dummy_int >> dummy_str)
 						{
 							if (dummy_str == "triangles")
 								file_triangle_num = dummy_int;
@@ -81,6 +81,44 @@ void obj_model_reader::read_obj_file()
 			{
 				// I do not know what to do with this!
 			}
+			else if (!dummy_str.compare("f"))
+			{
+				face_indx face;
+				int num_edges = 0;
+				while (iss >> dummy_str)
+				{
+					int v_indx, vt_indx, vn_indx;
+					char delimiter = '/';
+					std::istringstream issr(dummy_str);
+					std::getline(issr, dummy_str, delimiter);
+					v_indx = std::stoi(dummy_str);
+					std::getline(issr, dummy_str, delimiter);
+					vt_indx = std::stoi(dummy_str);
+					std::getline(issr, dummy_str, delimiter);
+					vn_indx = std::stoi(dummy_str);
+
+					face.v_indx.push_back(v_indx);
+					face.vt_indx.push_back(vt_indx);
+					face.vn_indx.push_back(vn_indx);
+
+					num_edges++;
+				}
+
+				switch (num_edges)
+				{
+				case 3:
+					num_triangles++;
+					break;
+				case 4:
+					num_polygons++;
+					break;
+				/*default:
+					std::cerr << "Error in reading the object file " << line << " , " <<  num_edges << std::endl;*/
+				}
+				face.num_edges = num_edges;
+				face.mat_indx = current_mat_indx;
+				face_indexes.push_back(face);
+			}
 			if (iss >> point3)
 			{
 				if (!dummy_str.compare("v"))
@@ -98,59 +136,25 @@ void obj_model_reader::read_obj_file()
 					vts.push_back(point3);
 					vt_num++;
 				}
-				else if (!dummy_str.compare("f"))
-				{
-					face_indx face;
-					int num_edges = 0;
-					while (iss >> dummy_str)
-					{
-						iss >> dummy_str;
-						int v_indx, vt_indx, vn_indx;
-						char delimiter = '/';
-						std::istringstream issr(dummy_str);
-						std::getline(issr, dummy_str, delimiter);
-						v_indx = std::stoi(dummy_str);
-						std::getline(issr, dummy_str, delimiter);
-						vt_indx = std::stoi(dummy_str);
-						std::getline(issr, dummy_str, delimiter);
-						vn_indx = std::stoi(dummy_str);
-
-						face.v_indx.push_back(v_indx);
-						face.vt_indx.push_back(vt_indx);
-						face.vn_indx.push_back(vn_indx);
-
-						num_edges++;
-					}
-
-					switch (num_edges)
-					{
-					case 3:
-						num_triangles++;
-						break;
-					case 4:
-						num_polygons++;
-						break;
-					default:
-						std::cerr << "Error in reading the object file" << std::endl;
-					}
-					face.num_edges = num_edges;
-					face.mat_indx = current_mat_indx;
-					face_indexes.push_back(face);
-				}
 			}
 		}
 	}
 
-	if (v_num != file_vs_num)
-		std::cerr << "Inconsistency in the number of read vs with those in the obj file  " << v_num << "," << file_vs_num << std::endl;
-	if (vt_num != file_vts_num)
-		std::cerr << "Inconsistency in the number of read vts with those in the obj file  " << vt_num << "," << file_vts_num << std::endl;
-	if (vn_num != file_vns_num)
-		std::cerr << "Inconsistency in the number of read vns with those in the obj file  " << vn_num << "," << file_vns_num << std::endl;
-	if (num_polygons != file_polygon_num)
-		std::cerr << "Inconsistency in the number of read polygons with those in the obj file  " << num_polygons << "," << file_polygon_num << std::endl;
-	if (num_triangles != file_triangle_num)
-		std::cerr << "Inconsistency in the number of read triangles with those in the obj file  " << num_triangles << "," << file_triangle_num << std::endl;
+	/*if (v_num != file_vs_num)
+		std::cerr*/
+		std::cout << "Inconsistency in the number of read vs with those in the obj file  " << v_num << "," << file_vs_num << std::endl;
+	/*if (vt_num != file_vts_num)
+		std::cerr*/
+		std::cout << "Inconsistency in the number of read vts with those in the obj file  " << vt_num << "," << file_vts_num << std::endl;
+	/*if (vn_num != file_vns_num)
+		std::cerr*/
+		std::cout << "Inconsistency in the number of read vns with those in the obj file  " << vn_num << "," << file_vns_num << std::endl;
+	/*if (num_polygons != file_polygon_num)
+		std::cerr*/
+		std::cout << "Inconsistency in the number of read polygons with those in the obj file  " << num_polygons << "," << file_polygon_num << std::endl;
+	/*if (num_triangles != file_triangle_num)
+		std::cerr*/
+		std::cout << "Inconsistency in the number of read triangles with those in the obj file  " << num_triangles << "," << file_triangle_num << std::endl;
 
 	obj_file.close();
 }
