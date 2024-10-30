@@ -169,6 +169,7 @@ void obj_model_reader::read_mtl_file()
 		double Ns, d, Tr;
 		color Ka, Kd, Ks, Tf;
 		std::string dummy_str;
+		int material_counter = 0;
 		if (line.length() >= 3)
 		{
 			iss.clear();
@@ -179,57 +180,56 @@ void obj_model_reader::read_mtl_file()
 		{
 			if (dummy_str == "newmtl")
 			{
-				iss >> dummy_str;
-				std::cout << "Reading the material " << dummy_str << std::endl;
-				std::getline(mtl_file, line);
-				iss.clear();
-				iss.str("");
-				iss >> dummy_str;
-				if (dummy_str == "Ns")
+				if (material_counter)
 				{
-					iss >> Ns;
-					iss.clear();
-					iss.str("");
-				}
-				if (dummy_str == "d")
-				{
-					iss >> d;
-					iss.clear();
-					iss.str("");
-				}
-				if (dummy_str == "Tr")
-				{
-					iss >> Tr;
-					iss.clear();
-					iss.str("");
-				}
-				if (dummy_str == "Tf")
-				{
-					iss >> Tf;
-					iss.clear();
-					iss.str("");
-				}
-				if (dummy_str == "Ka")
-				{
-					iss >> Ka;
-					iss.clear();
-					iss.str("");
-				}
-				if (dummy_str == "Kd")
-				{
-					iss >> Kd;
-					iss.clear();
-					iss.str("");
-				}
-				if (dummy_str == "Ks")
-				{
-					iss >> Ks;
-					iss.clear();
-					iss.str("");
-
 					shared_ptr<material> material_i = make_shared<general>(Kd, Ns, d, Tr, Tf, Ks);
 					materials.push_back(material_i);
 				}
+				iss >> dummy_str;
+				std::cout << "Reading the material " << dummy_str << std::endl;
+				material_counter++;
+			}
+			else if (dummy_str == "Ns")
+			{
+				iss >> Ns;
+				iss.clear();
+				iss.str("");
+			}
+			else if (dummy_str == "d")
+			{
+				iss >> d;
+				iss.clear();
+				iss.str("");
+			}
+			else if (dummy_str == "Tr")
+			{
+				iss >> Tr;
+				iss.clear();
+				iss.str("");
+			}
+			else if (dummy_str == "Tf")
+			{
+				iss >> Tf;
+				iss.clear();
+				iss.str("");
+			}
+			else if (dummy_str == "Ka")
+			{
+				iss >> Ka;
+				iss.clear();
+				iss.str("");
+			}
+			else if (dummy_str == "Kd")
+			{
+				iss >> Kd;
+				iss.clear();
+				iss.str("");
+			}
+			else if (dummy_str == "Ks")
+			{
+				iss >> Ks;
+				iss.clear();
+				iss.str("");
 			}
 
 		}
@@ -241,15 +241,14 @@ void obj_model_reader::add_item()
 {
 	for (auto face : face_indexes)
 	{
-		std::vector<point3> vs, vts, vns;
 		shared_ptr<material> mat;
 		int num_edges = face.num_edges;
 
 		for (int i = 0; i < num_edges; i++)
 		{
-			point3 v_i = vs[face.vt_indx[i] - 1]; // 1 based indexing in the obj file
-			point3 vt_i = vts[face.vt_indx[i] - 1];
-			point3 vn_i = vns[face.vt_indx[i] - 1];
+			point3 v_i = this->vs[face.vt_indx[i] - 1]; // 1 based indexing in the obj file
+			point3 vt_i = this->vts[face.vt_indx[i] - 1];
+			point3 vn_i = this->vns[face.vt_indx[i] - 1];
 			vs.push_back(v_i);
 			vts.push_back(vt_i);
 			vns.push_back(vn_i);
