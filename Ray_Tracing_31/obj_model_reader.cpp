@@ -2,7 +2,7 @@
 
 
 obj_model_reader::obj_model_reader(std::string _obj_file_name, hittable_list* _world) :
-		obj_file_name(_obj_file_name), v_num(0), vt_num(0), vn_num(0), world(_world) {}
+	obj_file_name(_obj_file_name), v_num(0), vt_num(0), vn_num(0), world(_world) {}
 
 void obj_model_reader::reader()
 {
@@ -112,8 +112,8 @@ void obj_model_reader::read_obj_file()
 				case 4:
 					num_polygons++;
 					break;
-				/*default:
-					std::cerr << "Error in reading the object file " << line << " , " <<  num_edges << std::endl;*/
+					/*default:
+						std::cerr << "Error in reading the object file " << line << " , " <<  num_edges << std::endl;*/
 				}
 				face.num_edges = num_edges;
 				face.mat_indx = current_mat_indx;
@@ -142,19 +142,19 @@ void obj_model_reader::read_obj_file()
 
 	/*if (v_num != file_vs_num)
 		std::cerr*/
-		std::cout << "Inconsistency in the number of read vs with those in the obj file  " << v_num << "," << file_vs_num << std::endl;
+	std::cout << "Inconsistency in the number of read vs with those in the obj file  " << v_num << "," << file_vs_num << std::endl;
 	/*if (vt_num != file_vts_num)
 		std::cerr*/
-		std::cout << "Inconsistency in the number of read vts with those in the obj file  " << vt_num << "," << file_vts_num << std::endl;
+	std::cout << "Inconsistency in the number of read vts with those in the obj file  " << vt_num << "," << file_vts_num << std::endl;
 	/*if (vn_num != file_vns_num)
 		std::cerr*/
-		std::cout << "Inconsistency in the number of read vns with those in the obj file  " << vn_num << "," << file_vns_num << std::endl;
+	std::cout << "Inconsistency in the number of read vns with those in the obj file  " << vn_num << "," << file_vns_num << std::endl;
 	/*if (num_polygons != file_polygon_num)
 		std::cerr*/
-		std::cout << "Inconsistency in the number of read polygons with those in the obj file  " << num_polygons << "," << file_polygon_num << std::endl;
+	std::cout << "Inconsistency in the number of read polygons with those in the obj file  " << num_polygons << "," << file_polygon_num << std::endl;
 	/*if (num_triangles != file_triangle_num)
 		std::cerr*/
-		std::cout << "Inconsistency in the number of read triangles with those in the obj file  " << num_triangles << "," << file_triangle_num << std::endl;
+	std::cout << "Inconsistency in the number of read triangles with those in the obj file  " << num_triangles << "," << file_triangle_num << std::endl;
 
 	obj_file.close();
 }
@@ -164,12 +164,13 @@ void obj_model_reader::read_mtl_file()
 	std::string line;
 	std::ifstream mtl_file(mtl_file_name);
 	std::stringstream iss;
+
+	double Ns, d, Tr;
+	color Ka, Kd, Ks, Tf;
+	std::string dummy_str;
+	int material_counter = 0;
 	while (std::getline(mtl_file, line))
 	{
-		double Ns, d, Tr;
-		color Ka, Kd, Ks, Tf;
-		std::string dummy_str;
-		int material_counter = 0;
 		if (line.length() >= 3)
 		{
 			iss.clear();
@@ -234,13 +235,20 @@ void obj_model_reader::read_mtl_file()
 
 		}
 	}
+
+	// Since we add to the materials vector whenever we read a newmtl line the last material would not be added otherwise.
+	shared_ptr<material> material_i = make_shared<general>(Kd, Ns, d, Tr, Tf, Ks);
+	materials.push_back(material_i);
 	mtl_file.close();
 }
 
 void obj_model_reader::add_item()
 {
+	int counter = 0;
 	for (auto face : face_indexes)
 	{
+		counter++;
+		std::cout << "Adding the face " << counter << std::endl;
 		shared_ptr<material> mat;
 		int num_edges = face.num_edges;
 
