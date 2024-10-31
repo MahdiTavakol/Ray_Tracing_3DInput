@@ -245,8 +245,12 @@ void obj_model_reader::read_mtl_file()
 void obj_model_reader::add_item()
 {
 	int counter = 0;
+
+
+
 	for (auto face : face_indexes)
 	{
+
 		counter++;
 		std::cout << "Adding the face " << counter << std::endl;
 		shared_ptr<material> mat;

@@ -24,10 +24,11 @@ struct face_indx
 
 class obj_model_reader {
 public:
+	obj_model_reader() {}
 	obj_model_reader(std::string _obj_file_name, hittable_list* _world);
 	void reader();
 
-private:
+protected:
 	hittable_list* world;
 	std::string obj_file_name, mtl_file_name;
 	std::vector<vec3> vs, vts, vns;
@@ -39,7 +40,7 @@ private:
 
 	void read_obj_file();
 	void read_mtl_file();
-	void add_item();
+	virtual void add_item();
 };
 
 

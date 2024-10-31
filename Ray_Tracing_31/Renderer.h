@@ -64,6 +64,7 @@ private:
 	void setup_boxes_rotated();
 	void setup_cornell_smoke();
 	void setup_3d_obj();
+	void setup_3d_obj_parallel();
 
 };
 
