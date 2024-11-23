@@ -45,9 +45,11 @@ public:
 
 private:
 	int mode;
-	camera* cam;
+	camera_derived* cam_derived;
+	camera_parallel* cam;
 	input* in;
 	hittable_list* world;
+	hittable_list_parallel* world_parallel;
 	parallel* para;
 	color_array* c_array, * c_array_all;
 	std::ofstream* file;

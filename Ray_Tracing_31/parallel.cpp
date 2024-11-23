@@ -1,19 +1,29 @@
 #include "parallel.h"
 
 
-parallel::parallel(hittable_list* _world, camera* _cam, int _cam_type) :
-    world(_world), cam(_cam), cam_type(_cam_type)
+parallel::parallel(hittable_list* _world, camera_parallel* _cam) :
+    world(_world), cam(_cam), cam_type(PARALLEL_CAMERA)
+{
+    std::cout << "B prequel" << std::endl;
+    MPI_initialize();
+    setup();
+}
+
+parallel::parallel(hittable_list_parallel* _world_parallel, camera_derived* _cam_derived) :
+    world_parallel(_world_parallel), cam_derived(_cam_derived), cam_type(CAMERA)
+{
+    std::cout << "A prequel" << std::endl;
+    MPI_initialize();
+    setup();
+}
+
+void parallel::MPI_initialize()
 {
     // MPI variables
     MPI_world = MPI_COMM_WORLD;
     MPI_Comm_rank(MPI_world, &rank);
     MPI_Comm_size(MPI_world, &size);
-
-    setup();
 }
-
-parallel::parallel(hittable_list* _world, camera* _cam) :
-    parallel(_world, _cam, CAMERA) {}
 
 void parallel::setup()
 {
@@ -47,7 +57,17 @@ color_array* const parallel::color_array_all_ptr() {
 }
 
 void parallel::render() {
-    cam->render(*world, c_array);
+    if (cam_type == PARALLEL_CAMERA)
+    {
+        std::cout << "B opening" << std::endl;
+        cam->render(*world, c_array);
+    }
+    else if (cam_type == CAMERA)
+    {
+        // In this case the world should be of hittable_list_parallel type
+        std::cout << "A opening" << std::endl;
+        cam->render(*world_parallel, c_array);
+    }
 }
 
 void parallel::gather() {
