@@ -4,9 +4,11 @@
 #include "rtweekend.h"
 
 #include "obj_model_reader.h"
+#include "obj_model_reader_parallel.h"
 #include "aabb.h"
 #include "bvh.h"
 #include "camera.h"
+#include "camera_derived.h"
 #include "camera_parallel.h"
 #include "color.h"
 #include "color_array.h"
@@ -39,11 +41,11 @@ public:
 	void gather();
 	void write_file();
 	parallel* para_ptr() const;
-	camera_parallel* cam_ptr() const;
+	camera* cam_ptr() const;
 
 private:
 	int mode;
-	camera_parallel* cam;
+	camera* cam;
 	input* in;
 	hittable_list* world;
 	parallel* para;

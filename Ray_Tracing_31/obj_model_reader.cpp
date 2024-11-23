@@ -6,8 +6,13 @@ obj_model_reader::obj_model_reader(std::string _obj_file_name, hittable_list* _w
 
 void obj_model_reader::reader()
 {
+	std::cout << "Started reading the obj file " << std::endl;
 	read_obj_file();
+	std::cout << "Finished reading the obj file " << std::endl;
+	std::cout << "Started reading the mtl file " << std::endl;
 	read_mtl_file();
+	std::cout << "Finished reading the mtl file " << std::endl;
+	std::cout << "Started adding the items " << std::endl;
 	add_item();
 }
 
@@ -140,20 +145,15 @@ void obj_model_reader::read_obj_file()
 		}
 	}
 
-	/*if (v_num != file_vs_num)
-		std::cerr*/
+	if (v_num != file_vs_num)
 	std::cout << "Inconsistency in the number of read vs with those in the obj file  " << v_num << "," << file_vs_num << std::endl;
-	/*if (vt_num != file_vts_num)
-		std::cerr*/
+	if (vt_num != file_vts_num)
 	std::cout << "Inconsistency in the number of read vts with those in the obj file  " << vt_num << "," << file_vts_num << std::endl;
-	/*if (vn_num != file_vns_num)
-		std::cerr*/
+	if (vn_num != file_vns_num)
 	std::cout << "Inconsistency in the number of read vns with those in the obj file  " << vn_num << "," << file_vns_num << std::endl;
-	/*if (num_polygons != file_polygon_num)
-		std::cerr*/
+	if (num_polygons != file_polygon_num)
 	std::cout << "Inconsistency in the number of read polygons with those in the obj file  " << num_polygons << "," << file_polygon_num << std::endl;
-	/*if (num_triangles != file_triangle_num)
-		std::cerr*/
+	if (num_triangles != file_triangle_num)
 	std::cout << "Inconsistency in the number of read triangles with those in the obj file  " << num_triangles << "," << file_triangle_num << std::endl;
 
 	obj_file.close();

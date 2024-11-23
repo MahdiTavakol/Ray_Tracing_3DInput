@@ -20,6 +20,10 @@ class input;
 class camera {
 public:
 	friend class input;
+	friend class parallel;
+
+	camera()
+	{}
 
 
 	void render(const hittable& world, color_array& c_a);
@@ -37,6 +41,12 @@ public:
 	void print_back_ground() const
 	{
 		std::cout << background << std::endl;
+	}
+
+	virtual void set_range(const int& _width_min, const int& _width_max, const int& _height_min, const int& _height_max)
+	{
+		// I just needed that method in both the camera and camera_parallel classes
+		// so that the setup in the parallel class can have generic input of camera* type
 	}
 
 protected:

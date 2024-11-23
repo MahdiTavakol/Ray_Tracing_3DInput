@@ -1,14 +1,24 @@
 #include "Renderer.h"
 
 
-
 renderer::renderer(int argc, char** argv, int _mode, std::string _filename) 
 	: mode(_mode), c_array(nullptr), c_array_all(nullptr)
 {
 	in = new input(argc, argv, mode);
-	cam = new camera_parallel(in);
-	world = new hittable_list();
-	para = new parallel(cam, world);
+
+	switch (mode)
+	{
+	case OBJ_MODEL_PARALLEL:
+		cam = new camera_derived(in);
+		world = new hittable_list_parallel();
+		para = new parallel(world, cam,CAMERA);
+	default:
+		cam = new camera_parallel(in);
+		world = new hittable_list();
+		para = new parallel(world, cam, PARALLEL_CAMERA);
+	}
+
+	
 	file = new std::ofstream(_filename);
 	writer = new write(file);
 }
@@ -67,9 +77,12 @@ void renderer::setup()
 	case OBJ_MODEL:
 		setup_3d_obj();
 		break;
+	case OBJ_MODEL_PARALLEL:
+		setup_3d_obj_parallel();
+		break;
 	}
 
-	para->setup(cam, world);
+	para->setup();
 
 }
 
@@ -105,7 +118,7 @@ parallel* renderer::para_ptr() const {
 	return para;
 }
 
-camera_parallel* renderer::cam_ptr() const
+camera* renderer::cam_ptr() const
 {
 	return cam;
 }
@@ -296,4 +309,14 @@ void renderer::setup_3d_obj()
 	std::string obj_file_name("Toyota_Sequoia_2023/Toyota_Sequoia_2023_2015_obj.obj");
 	shared_ptr<obj_model_reader> model_reader = make_shared<obj_model_reader>(obj_file_name, world);
 	model_reader->reader();
+}
+
+void renderer::setup_3d_obj_parallel()
+{
+	std::string obj_file_name("Toyota_Sequoia_2023/Toyota_Sequoia_2023_2015_obj.obj");
+	std::cout << "Point 1" << std::endl;
+	shared_ptr<obj_model_reader_parallel> model_reader = make_shared<obj_model_reader_parallel>(obj_file_name, world, para);
+	std::cout << "Point 2" << std::endl;
+	model_reader->reader();
+	std::cout << "Point 3" << std::endl;
 }

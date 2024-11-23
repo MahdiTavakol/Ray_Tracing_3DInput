@@ -10,22 +10,26 @@
 #include "hittable_list.h"
 #include "color_array.h"
 
+
 class parallel
 {
 public:
-    parallel(camera_parallel* _cam, hittable_list* _world);
-    void setup(camera_parallel* _cam, hittable_list* _world);
+    parallel(hittable_list* _world, camera* _cam, int _cam_type);
+    parallel(hittable_list* _world, camera* _cam);
+    void setup();
     color_array* const color_array_ptr();
     color_array* const color_array_all_ptr();
     void render();
     void gather();
     int return_rank() const;
+    int return_size() const;
 
 protected:
+    bool cam_type;
     int size, rank;
     int width_per_node, height_per_node;
     int width_min, width_max, height_min, height_max;
-    camera_parallel* cam;
+    camera* cam;
     hittable_list* world;
     MPI_Comm MPI_world;
     color_array c_array, c_array_all;

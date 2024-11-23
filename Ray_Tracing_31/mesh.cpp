@@ -9,6 +9,8 @@ mesh::mesh(const std::vector<point3>& _vs, const std::vector<point3>& _vts,
 
 void mesh::initialize()
 {
+	//std::cout << FLERR;
+	//std::cout << "Started Initializing " << std::endl;
 	auto n1 = cross(vs[1] - vs[0], vs[2] - vs[0]);
 	auto n2 = cross(vs[1] - vs[3], vs[2] - vs[3]);
 	unit_n1 = unit_vector(n1);
@@ -21,6 +23,9 @@ void mesh::initialize()
 	w2 = n2 / dot(n2, n2);
 
 	set_bounding_box();
+
+	//std::cout << FLERR;
+	//std::cout << "Finished Initializing " << std::endl;
 }
 
 void mesh::set_bounding_box()

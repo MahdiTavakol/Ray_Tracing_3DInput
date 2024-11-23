@@ -27,7 +27,8 @@ int main(int argc, char** argv)
 	//mode = TWO_BOXES;
 	//mode = TWO_BOXES_ROTATED;
 	//mode = CORNELL_SMOKE;
-	mode = OBJ_MODEL;
+	//mode = OBJ_MODEL;
+	mode = OBJ_MODEL_PARALLEL;
 
 	//filename = "RT19.ppm";
 	//filename = "RT20.ppm";
@@ -40,13 +41,14 @@ int main(int argc, char** argv)
 	//filename = "RT27.ppm";
 	//filename = "RT28.ppm";
 	//filename = "RT29.ppm";
-	filename = "RT30.ppm";
+	//filename = "RT30.ppm";
+	filename = "RT31.ppm";
 
 	renderer* render = new renderer(argc, argv, mode, filename);
 
 	rank = render->para_ptr()->return_rank();
 
-	camera_parallel* cam = render->cam_ptr();
+	camera* cam = render->cam_ptr();
 
 	
 	if (mode == SIMPLE_LIGHT || mode == TWO_LIGHTS)
