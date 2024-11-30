@@ -246,24 +246,43 @@ void obj_model_reader::add_item()
 {
 	int counter = 0;
 
-
-
-	for (auto face : face_indexes)
+	for (auto & face : face_indexes)
 	{
+		std::vector<point3> vs_i;
+		std::vector<point3> vts_i;
+		std::vector<point3> vns_i;
 
 		counter++;
 		std::cout << "Adding the face " << counter << std::endl;
 		shared_ptr<material> mat;
 		int num_edges = face.num_edges;
 
-		for (int i = 0; i < num_edges; i++)
+		for (int j = 0; j < num_edges; j++)
 		{
-			point3 v_i = this->vs[face.vt_indx[i] - 1]; // 1 based indexing in the obj file
-			point3 vt_i = this->vts[face.vt_indx[i] - 1];
-			point3 vn_i = this->vns[face.vt_indx[i] - 1];
-			vs.push_back(v_i);
-			vts.push_back(vt_i);
-			vns.push_back(vn_i);
+			if (j >= face.vt_indx.size()) {
+				std::cerr << "1-Out of bonds access from the rank " << para->return_rank() << std::endl;
+				continue;
+			}
+			if (face.vt_indx[j] - 1 < 0 || face.vt_indx[j] - 1 >= this->vs.size()) {
+				std::cerr << "2-Out of bonds access from the rank " << para->return_rank() << std::endl;
+				continue;
+			}
+			if (face.vt_indx[j] - 1 >= this->vts.size()) {
+				std::cerr << "3-Out of bonds access from the rank " << para->return_rank() << std::endl;
+				continue;
+			}
+			if (face.vt_indx[j] - 1 >= this->vns.size()) {
+				std::cout << "4-Out of bonds access from the rank " << para->return_rank() << std::endl;
+				std::cout << face.vt_indx[j] << ">=" << this->vns.size() << std::endl;
+				continue;
+			}
+
+			point3 v_j = this->vs[face.vt_indx[j] - 1]; // 1 based indexing in the obj file
+			point3 vt_j = this->vts[face.vt_indx[j] - 1];
+			point3 vn_j = this->vns[face.vt_indx[j] - 1];
+			vs_i.push_back(v_j);
+			vts_i.push_back(vt_j);
+			vns_i.push_back(vn_j);
 		}
 
 		mat = materials[face.mat_indx];
