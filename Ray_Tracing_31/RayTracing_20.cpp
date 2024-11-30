@@ -49,7 +49,6 @@ int main(int argc, char** argv)
 	rank = render->para_ptr()->return_rank();
 
 	camera* cam = render->cam_ptr();
-
 	
 	if (mode == SIMPLE_LIGHT || mode == TWO_LIGHTS)
 		cam->move_camera(point3(26, 3, 6));
@@ -57,6 +56,7 @@ int main(int argc, char** argv)
 		cam->move_camera(point3(278, 278, -800));
 	else
 		cam->move_camera(point3(0, 0, 12));
+
 
 	render->setup();
 
@@ -68,6 +68,8 @@ int main(int argc, char** argv)
 	}
 
 	render->render();
+
+	std::cout << "Point 13" << std::endl;
 
 	if (rank == 0)
 	{

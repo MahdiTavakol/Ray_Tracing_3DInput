@@ -39,7 +39,7 @@ void obj_model_reader_parallel::add_item()
 
 	int size_per_rank = face_indexes.size() / para->return_size() + 1;
 	int ilo = para->return_rank() * size_per_rank;
-	int ihi = ilo + 100; // ilo + size_per_rank;
+	int ihi = ilo + size_per_rank;
 
 
 	//for (auto face : face_indexes)

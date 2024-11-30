@@ -40,6 +40,10 @@ void parallel::setup()
         // colors_array
         c_array.reset_size(width_per_node, height_per_node);
     }
+    else if (cam_type == CAMERA)
+    {
+        c_array_all.reset_size(cam_derived->image_width, cam_derived->image_height);
+    }
 }
 
 color_array* const parallel::color_array_ptr() {
@@ -50,10 +54,7 @@ color_array* const parallel::color_array_ptr() {
 }
 
 color_array* const parallel::color_array_all_ptr() {
-    if (cam_type == PARALLEL_CAMERA)
-        return &c_array_all;
-    else
-        std::cerr << "Undefined behavior" << std::endl;
+    return &c_array_all;
 }
 
 void parallel::render() {
@@ -66,7 +67,8 @@ void parallel::render() {
     {
         // In this case the world should be of hittable_list_parallel type
         std::cout << "A opening" << std::endl;
-        cam->render(*world_parallel, c_array);
+        if (world_parallel == nullptr) std::cout << "World_parallel is nullptr" << std::endl;
+        cam_derived->render(*world_parallel, c_array_all);
     }
 }
 

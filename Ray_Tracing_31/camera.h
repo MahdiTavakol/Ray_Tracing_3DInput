@@ -22,13 +22,14 @@ public:
 	friend class input;
 	friend class parallel;
 
-	camera()
-	{}
+	camera() {
+		initialize();
+	}
 
 
 	void render(const hittable& world, color_array& c_a);
 
-	void move_camera(point3 _lookfrom) {
+	virtual void move_camera(point3 _lookfrom) {
 		this->lookfrom = _lookfrom;
 	}
 

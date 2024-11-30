@@ -20,6 +20,12 @@ public:
 		_in->setup_camera(this);
 	}
 
+	void move_camera(point3 _lookfrom) override {
+		std::cout << "Point -4" << std::endl;
+		this->lookfrom = _lookfrom;
+		std::cout << "Point -5" << std::endl;
+	}
+
 };
 
 #endif

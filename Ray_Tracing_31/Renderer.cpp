@@ -84,6 +84,7 @@ void renderer::setup()
 		setup_3d_obj();
 		break;
 	case OBJ_MODEL_PARALLEL:
+		std::cout << "Point -1" << std::endl;
 		setup_3d_obj_parallel();
 		break;
 	}
@@ -100,20 +101,26 @@ void renderer::add(shared_ptr<hittable> object)
 
 void renderer::render()
 {
-	c_array = para->color_array_ptr(); // This points to the color_array object belonging to the parallel object.
+	std::cout << "Point 14" << std::endl;
+	//c_array = para->color_array_ptr(); // This points to the color_array object belonging to the parallel object.
 	para->render();
 }
 
 void renderer::gather()
 {
-	para->gather();
+	if (cam)
+		para->gather();
 	c_array_all = para->color_array_all_ptr();
 }
 
 void renderer::write_file()
 {
 	int image_width, image_height;
-	cam->return_image_size(image_width, image_height);
+
+	if (cam)
+		cam->return_image_size(image_width, image_height);
+	else if (cam_derived)
+		cam_derived->return_image_size(image_width, image_height);
 	writer->reset(c_array_all, image_width, image_height);
 
 	int rank = para->return_rank();
@@ -126,6 +133,8 @@ parallel* renderer::para_ptr() const {
 
 camera* renderer::cam_ptr() const
 {
+	if (mode == OBJ_MODEL_PARALLEL)
+		return cam_derived;
 	return cam;
 }
 
@@ -319,6 +328,7 @@ void renderer::setup_3d_obj()
 
 void renderer::setup_3d_obj_parallel()
 {
+	std::cout << "Point 0" << std::endl;
 	std::string obj_file_name("Toyota_Sequoia_2023/Toyota_Sequoia_2023_2015_obj.obj");
 	std::cout << "Point 1" << std::endl;
 	shared_ptr<obj_model_reader_parallel> model_reader = make_shared<obj_model_reader_parallel>(obj_file_name, world_parallel, para);

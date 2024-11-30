@@ -14,7 +14,6 @@ bool hittable_list_parallel::hit(const ray& r, interval ray_t, hit_record& rec) 
 	int hit_anything_all = 0;
 	auto closest_so_far = ray_t.max;
 
-	std::cout << "Point A2" << std::endl;
 
 	for (const auto& object : objects)
 	{
@@ -28,7 +27,6 @@ bool hittable_list_parallel::hit(const ray& r, interval ray_t, hit_record& rec) 
 			hit_anything = rank;
 			temp_rec_struct = hit_record_to_struct(temp_rec);
 		}
-		std::cout << "Point A3" << std::endl;
 	}
 	MPI_Allreduce(&hit_anything, &hit_anything_all, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
 
@@ -36,7 +34,6 @@ bool hittable_list_parallel::hit(const ray& r, interval ray_t, hit_record& rec) 
 		std::cerr << "A ray hits objects in two different MPI ranks " << std::endl;
 	int count = sizeof(hit_record_struct) / sizeof(double);
 	MPI_Bcast(&temp_rec_struct, count, MPI_DOUBLE, hit_anything_all, MPI_COMM_WORLD);
-
 
 	return hit_anything_all;
 }

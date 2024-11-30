@@ -6,26 +6,33 @@
 
 
 void camera::render(const hittable& world, color_array& c_a) {
-	initialize();
+	
 
-
+	std::cout << "Point 1000" << std::endl;
+	int point_number = 1000;
+	std::cout << "Image_height == " << image_height << std::endl;
 
 	for (int j = 0; j < image_height; j++)
 	{
 		std::clog << "\rScanlines remaining: " << (image_height - j) << " " << std::flush;
 		for (int i = 0; i < image_width; i++)
 		{
+			std::cout << "Point " << ++point_number << std::endl;
 			color pixel_color(0, 0, 0);
+			samples_per_pixel = 0;
 			for (int sample = 0; sample < samples_per_pixel; sample++)
 			{
 				ray r = get_ray(i, j);
 				pixel_color += ray_color(r, max_depth, world);
 			}
 			pixel_color = pixel_samples_scale * pixel_color;
+			std::cout << "Point 51" << std::endl;
 			color_data** c_data = c_a.return_array();
+			std::cout << "Point 52" << std::endl;
 			c_data[i][j].r = pixel_color.x();
 			c_data[i][j].g = pixel_color.y();
 			c_data[i][j].b = pixel_color.z();
+			std::cout << "Point 53" << std::endl;
 		}
 	}
 
@@ -48,6 +55,7 @@ void camera::initialize()
 	w = unit_vector(lookfrom - lookat);
 	u = unit_vector(cross(vup, w));
 	v = cross(w, u);
+
 
 	auto viewport_u = viewport_width * u;
 	auto viewport_v = viewport_height * -v;
@@ -96,8 +104,12 @@ color camera::ray_color(const ray& r, int depth, const hittable& world) const
 
 	hit_record rec;
 
+	std::cout << "Point 30" << std::endl;
+
 	if (!world.hit(r, interval(0.001, infinity), rec))
 		return background;
+
+	std::cout << "Point 31" << std::endl;
 
 	ray scattered;
 	color attenuation;
